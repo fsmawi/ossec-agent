@@ -1,0 +1,10 @@
+---
+
+- name: copy file hids-ossec-agent
+  copy:
+    src: files/ossec-hids-agent_{{ ossec_ubuntu_release_version }}.deb
+    dest: /tmp/ossec-hids-agent.deb
+
+- name: install hids-ossec-agent
+  apt:
+    deb: /tmp/ossec-hids-agent.deb

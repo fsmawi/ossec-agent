@@ -1,0 +1,17 @@
+---
+# Tasks specific for RedHat systems
+
+- name: "RedHat | Set some facts"
+  set_fact:
+    ansible_distribution: centos
+  when: ansible_distribution == "RedHat"
+
+- name: copy file hids-ossec-agent
+  copy:
+    src: files/ossec-hids-agent-{{ ossec_centos_release_version }}.rpm
+    dest: /tmp/ossec-hids-agent.rpm
+
+- name: install hids-ossec-agent
+  yum:
+    name: /tmp/ossec-hids-agent.rpm
+    state: present
