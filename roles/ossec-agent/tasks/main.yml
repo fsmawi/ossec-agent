@@ -5,15 +5,6 @@
   include_tasks: "{{ ansible_os_family }}.yml"
   when: (ossec_disable_public_repos is not defined) or (ossec_disable_public_repos != 'yes')
 
-- name: "Install {{ ossec_agent_package_name }}"
-  package:
-    name: "{{ ossec_agent_package_name }}"
-  when: "'.deb' not in ossec_agent_package_name"
-
-- name: Install OSSEC Agent from .deb package
-  apt: deb="{{ ossec_agent_package_name }}"
-  when: "'.deb' in ossec_agent_package_name"
-
 - name: Set ossec deploy facts for RedHat
   set_fact:
     ossec_agent_config_filename: ossec-agent.conf
