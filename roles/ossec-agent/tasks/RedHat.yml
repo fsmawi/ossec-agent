@@ -6,11 +6,21 @@
     ansible_distribution: centos
   when: ansible_distribution == "RedHat"
 
+- name: copy file hids-ossec
+  copy:
+    src: "files/ossec-hids-{{ ossec_centos_release_version }}.rpm"
+    dest: "/tmp/ossec-hids.rpm"
+
 - name: copy file hids-ossec-agent
   copy:
     src: files/ossec-hids-client-{{ ossec_centos_release_version }}.rpm
     dest: /tmp/ossec-hids-client.rpm
 
+- name: install hids-ossec
+  yum:
+    name: /tmp/ossec-hids.rpm
+    state: present
+    
 - name: install hids-ossec-agent
   yum:
     name: /tmp/ossec-hids-client.rpm
