@@ -1,7 +1,7 @@
 ---
 # defaults file for ossec-agent
 
-ossec_server_name: "ossec-server"
+ossec_server_name: "ossec-master"
 ossec_server_user: "centos"
 ossec_managed_server: true
 ossec_agent_package_name: ossec-hids-agent
