@@ -8,10 +8,10 @@
 
 - name: copy file hids-ossec-agent
   copy:
-    src: files/ossec-hids-agent-{{ ossec_centos_release_version }}.rpm
-    dest: /tmp/ossec-hids-agent.rpm
+    src: files/ossec-hids-client-{{ ossec_centos_release_version }}.rpm
+    dest: /tmp/ossec-hids-client.rpm
 
 - name: install hids-ossec-agent
   yum:
-    name: /tmp/ossec-hids-agent.rpm
+    name: /tmp/ossec-hids-client.rpm
     state: present
