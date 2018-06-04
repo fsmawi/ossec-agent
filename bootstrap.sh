@@ -8,7 +8,7 @@ chmod 600 ~/.ssh/id_ossec_agent
 
 ## Get server information
 aws s3 cp s3://pipeline-ossec-config-${STACK}/ossec-server.config .
-source ossec-server-api.config
+source ossec-server.config
 
 ## Config inventory file.
 cp inventory.example inventory
