@@ -3,7 +3,7 @@
 OSSEC_BUCKET='s3://pipeline-ossec-config-prod'
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query 'Account')
 
-if [[ $AWS_ACCOUNT_ID = "672327909798" ]]
+if [[ $AWS_ACCOUNT_ID = "672327909798" ]]; then
     OSSEC_BUCKET='s3://pipeline-ossec-config-dev'
 fi
 
