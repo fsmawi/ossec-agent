@@ -106,6 +106,24 @@
     prompt: 'Please execute the following command on your ossec-server: "/var/ossec/bin/ossec-control restart"'
   when: not ossec_managed_server and not check_server_keys.stat.exists and ossec_server_name|default("") == ""
 
+- name: "Starting auth daemon on server {{ ossec_server_name }}"
+  service:
+    name: ossec-authd
+    state: started
+  when: ossec_managed_server and not check_keys.stat.exists and ossec_server_name|default("") != ""
+  delegate_to: "{{ ossec_server_name }}"
+  run_once: true
+  tags:
+    - config
+
+- name: "Pausing"
+  pause:
+    minutes: 2
+    prompt: 'Please execute the following command on your ossec-server: "service ossec-authd start"'
+  when: not ossec_managed_server and not check_keys.stat.exists or ossec_server_name|default("") == ""
+  tags:
+    - skip_ansible_lint
+
 - name: "Start ossec-agent if not already running"
   service:
     name: "{{ ossec_init_name }}"

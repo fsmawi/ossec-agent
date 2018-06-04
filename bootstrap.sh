@@ -1,6 +1,11 @@
 #!/bin/bash
 
-[[ -z "${OSSEC_STACK_STAGE}" ]] && OSSEC_BUCKET='s3://pipeline-ossec-config-prod' || OSSEC_BUCKET="s3://pipeline-ossec-config-${OSSEC_STACK_STAGE}"
+OSSEC_BUCKET='s3://pipeline-ossec-config-prod'
+AWS_ACCOUNT_ID=$(aws sts get-caller-identity --output text --query 'Account')
+
+if [[ $AWS_ACCOUNT_ID = "672327909798" ]]
+    OSSEC_BUCKET='s3://pipeline-ossec-config-dev'
+fi
 
 # Configure SSH key.
 aws s3 cp ${OSSEC_BUCKET}/id_ossec_agent ~/.ssh/
@@ -16,4 +21,4 @@ sed -i "s/REMOTE_HOST_IP/${OSSEC_SERVER_IP}/g" inventory
 sed -i "s/REMOTE_HOST_USERNAME/centos/g" inventory
 
 ## Run ansible playbook.
-ansible-playbook -vvv -i inventory playbook.yml --extra-vars "ossec_server_name=${OSSEC_SERVER_IP} ossec_server_fqdn=${OSSEC_SERVER_FQDN}"
+ansible-playbook -vvv -i inventory playbook.yml --extra-vars "ossec_server_ip=${OSSEC_SERVER_IP} ossec_server_fqdn=${OSSEC_SERVER_FQDN}"
