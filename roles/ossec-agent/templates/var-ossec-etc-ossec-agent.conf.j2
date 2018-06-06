@@ -1,20 +1,76 @@
-<!-- OSSEC example config -->
-
 <ossec_config>
-  {% if ossec_active_response_disabled is defined %}
-  <active-response>
-    <disabled>{{ ossec_active_response_disabled }}</disabled>
-  </active-response>
-  {% endif %}
   <client>
-    {% if ossec_server_ip is defined %}
     <server-ip>{{ ossec_server_ip }}</server-ip>
-    {% endif %}
-    {% if ossec_server_fqdn is defined %}
     <server-hostname>{{ ossec_server_fqdn }}</server-hostname>
-    {% endif %}
-    {% if ossec_profile is defined %}
-    <config-profile>{{ ossec_profile }}</config-profile>
-    {% endif %}
   </client>
+
+  <syscheck>
+    <!-- Perform syscheck every 5 minutes -->
+    <frequency>300</frequency>
+
+    <!-- Alert if new files are created in the monitored directories. Configuration directories are suppressed -->
+    <alert_new_files>yes</alert_new_files>
+
+    <!-- Monitor these files for any changes -->
+    <directories check_sha1sum="yes" check_owner="yes" check_group="yes" check_perm="yes">/bin,/sbin,/usr/bin,/usr/sbin,/etc/sysctl.conf,/etc/sysctl.d,/etc/ld.so.conf,/etc/ld.so.conf.d,/etc/audit,/etc/modules,/etc/pam.d</directories>
+
+    <!-- Monitor these configuration files only for permission or ownership changes -->
+    <directories check_owner="yes" check_group="yes" check_perm="yes">/etc/passwd,/etc/shadow,/etc/apache2,/var/www/site-fpm,/var/www/site-scripts,/var/lib/mysql,/etc/nginx,/etc/varnish,/etc/sudoers,/etc/sudoers.d,/etc/syslog-ng,/etc/ssh,/etc/ssl,/boot,/var/ossec/etc,/var/ossec/rules</directories>
+  </syscheck>
+
+
+
+  <rootcheck>
+    <!-- Perform rootcheck every 24 hours -->
+    <frequency>86400</frequency>
+
+    <!-- Specificy signature files -->
+    <rootkit_files>/var/ossec/etc/shared/rootkit_files.txt</rootkit_files>
+    <rootkit_trojans>/var/ossec/etc/shared/rootkit_trojans.txt</rootkit_trojans>
+    <system_audit>/var/ossec/etc/shared/acquia_audit.txt</system_audit>
+
+    <!-- Disable unneeded checks -->
+    <check_sys>no</check_sys>
+    <check_pids>no</check_pids>
+    <check_winapps>no</check_winapps>
+    <check_winmalware>no</check_winmalware>
+    <check_winaudit>no</check_winaudit>
+  </rootcheck>
+
+  <alerts>
+    <log_alert_level>1</log_alert_level>
+  </alerts>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/messages</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/syslog</location>
+  </localfile>
+
+  <localfile>
+    <log_format>syslog</log_format>
+    <location>/var/log/auth.log</location>
+  </localfile>
+
+  <localfile>
+   <log_format>syslog</log_format>
+   <location>/var/log/audit/audit.log</location>
+  </localfile>
+
+  <localfile>
+   <log_format>full_command</log_format>
+   <command>netstat -tan |grep LISTEN|grep -v 127.0.0.1</command>
+   <frequency>300</frequency>
+  </localfile>
+
+  <localfile>
+   <log_format>full_command</log_format>
+   <command>iptables -L INPUT</command>
+   <frequency>300</frequency>
+  </localfile>
+
 </ossec_config>

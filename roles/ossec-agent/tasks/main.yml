@@ -17,6 +17,54 @@
     ossec_init_name: ossec
   when: ansible_os_family == "Debian"
 
+- name: "Configure internal options (local_internal_options.conf)"
+  template:
+    src: local_internal_options.conf
+    dest: /var/ossec/etc/local_internal_options.conf
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - init
+    - config
+    - rules
+
+- name: "Configure rootkit (rootkit_files.txt)"
+  template:
+    src: rootkit_files.txt
+    dest: /var/ossec/etc/shared/rootkit_files.txt
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - init
+    - config
+    - rules
+
+- name: "Configure rootkit (rootkit_trojans.txt)"
+  template:
+    src: rootkit_trojans.txt
+    dest: /var/ossec/etc/shared/rootkit_trojans.txt
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - init
+    - config
+    - rules
+
+- name: "Configure rootkit (acquia_audit.txt)"
+  template:
+    src: acquia_audit.txt
+    dest: /var/ossec/etc/shared/acquia_audit.txt
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - init
+    - config
+    - rules
+
 - name: "Installing the ossec-agent.conf"
   template:
     src: var-ossec-etc-ossec-agent.conf.j2
