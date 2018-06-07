@@ -58,19 +58,12 @@
 
   <localfile>
    <log_format>syslog</log_format>
+   <location>/var/log/audit.log</location>
+  </localfile>
+
+  <localfile>
+   <log_format>syslog</log_format>
    <location>/var/log/audit/audit.log</location>
-  </localfile>
-
-  <localfile>
-   <log_format>full_command</log_format>
-   <command>netstat -tan |grep LISTEN|grep -v 127.0.0.1</command>
-   <frequency>300</frequency>
-  </localfile>
-
-  <localfile>
-   <log_format>full_command</log_format>
-   <command>iptables -L INPUT</command>
-   <frequency>300</frequency>
   </localfile>
 
 </ossec_config>
